@@ -3,6 +3,9 @@ var router = express.Router();
 var sqlite3 = require('sqlite3').verbose();
 var path = require('path');
 var db = new sqlite3.Database(path.resolve("./nutrition.db"));
+var session = require('express-session');
+var connectionString = process.env.MS_TableConnectionString;
+
 
 var nutritionList = [];
 var calcList = {};
