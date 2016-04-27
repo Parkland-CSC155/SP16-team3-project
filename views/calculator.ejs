@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+</head>
+
+<body>
+<div class="container">
+    <h1>Calculator</h1><!--<iframe src="http://localhost:3000/"></iframe>-->
+    <form action="/calc/post" method="post">
+        <label>Name</label>
+        <input id = "tags" type="text" name="input" />
+        <label>Quantity</label>
+        <input id = "nums" type="number" name="quant" />
+        <button type="submit">Add</button>
+
+    </form>
+    <!--debugging tool-->
+    <p id = "test"></p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>water</th>
+            <th>energy</th>
+            <th>protein</th>
+            <th>sugar</th>
+            <th>sodium</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%if(typeof calcList != 'undefined'){%>
+            <% for (var key in calcList) {%>
+                <% if (calcList.hasOwnProperty(key)) {%>
+                <tr>
+                    <td><%=calcList[key].Shrt_Desc%></td>
+                    <td><%=calcList[key]['quant']%></td>
+                    <td><%=Number(calcList[key]['Water_(g)']*calcList[key]['quant']).toFixed(2)%></td>
+                    <td><%=Number(calcList[key].Energ_Kcal*calcList[key]['quant']).toFixed(2)%></td>
+                    <td><%=Number(calcList[key]['Protein_(g)']*calcList[key]['quant']).toFixed(2)%></td>
+                    <td><%=Number(calcList[key]['Sugar_Tot_(g)']*calcList[key]['quant']).toFixed(2)%></td>
+                    <td><%=Number(calcList[key]['Sodium_(mg)']*calcList[key]['quant']).toFixed(2)%></td>
+                    <td><form action="/calc/delete" method="post"><button type="submit">delete</button><input type="hidden" name="deleteId" value=<%=calcList[key].NDB_No%>></form></td>
+                </tr>
+                <%}%>
+            <%}%>
+        <%}%>
+        <tr>
+            <td><b>Total</b></td>
+            <td></td>
+            <td><%=isNaN(total['Water_(g)'])?total['Water_(g)']:Number(total['Water_(g)']).toFixed(2)%></td>
+            <td><%=isNaN(total['Energ_Kcal'])?total['Energ_Kcal']:Number(total['Energ_Kcal']).toFixed(2)%></td>
+            <td><%=isNaN(total['Protein_(g)'])?total['Protein_(g)']:Number(total['Protein_(g)']).toFixed(2)%></td>
+            <td><%=isNaN(total['Sugar_Tot_(g)'])?total['Sugar_Tot_(g)']:Number(total['Sugar_Tot_(g)']).toFixed(2)%></td>
+            <td><%=isNaN(total['Sodium_(mg)'])?total['Sodium_(mg)']:Number(total['Sodium_(mg)']).toFixed(2)%></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- JS -->
+<!-- this is the jQuery CDN reference. You need internet access for this file! -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<style type="text/css">
+    /* CSS HERE */
+</style>
+<script>
+    $(function() {
+        var l = <%-nutritionList%>;
+        $( "#tags" ).autocomplete({
+            source: l
+        });
+    });
+</script>
+</body>
+
+</html>
