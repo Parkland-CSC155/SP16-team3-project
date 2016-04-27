@@ -1,11 +1,21 @@
 var express= require('express');
 var router = express.Router();
 
-router.get('search', function(req, res) {
+router.get('/', function(req, res) {
     res.send("hello World");
 });
 
-router.get('list', function(req, res) {
+router.get('/search', function (req,res) {
+    var model = {
+        id: req.params.id
+    };
+    
+     res.render('serach/:id', { model: model })
+})
+
+
+
+router.get('/list', function(req, res) {
     res.send("hello World");
 });
 
