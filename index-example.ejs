@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<% include ./partials/head.ejs%>
+
 
 <body>
-<% include ./partials/header.ejs%>
     <div class="container">
         
         <div class="row">
@@ -25,8 +24,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                   
-                  
+                    <%if(typeof episodesData != 'undefined'){%>
+                        <% for(var i = 0; i <episodesData.length;i++){%>
+                            <tr>
+                                <td>
+                                    <a href="episodes/<%=episodesData[i].id%>"><%=episodesData[i].name%></a>
+                                </td>
+                                <td>Season <%=episodesData[i].season%></td>
+                                <td>Episode <%=episodesData[i].number%></td>
+                                <td><%=episodesData[i].airdate%></td>
+                                <!-- <td>
+                                    <a href="#">{SHOW NAME}</a>
+                                </td>
+                                <td>Season 3</td>
+                                <td>Episode 14</td>
+                                <td>2013-01-03</td> -->
+                            </tr>
+                        <%}%>
+                    <%}%>
                     </tbody>
                 </table>
             </div>
