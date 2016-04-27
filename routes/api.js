@@ -9,3 +9,4 @@ router.get('list', function(req, res) {
     res.send("hello World");
 });
 
+module.exports = router;
