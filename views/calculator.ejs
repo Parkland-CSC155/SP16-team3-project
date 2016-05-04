@@ -13,24 +13,27 @@
     <h1>Calculator</h1><!--<iframe src="http://localhost:3000/"></iframe>-->
     <form action="/calc/post" method="post">
         <label>Name</label>
-        <input id = "tags" type="text" name="input" />
+        <input class = "typehead" id = "tags" type="text" name="input" />
         <label>Quantity</label>
         <input id = "nums" type="number" name="quant" />
         <button type="submit">Add</button>
 
     </form>
     <!--debugging tool-->
-    <p id = "test"></p>
+    <!--<p id = "test">testing ajax</p>-->
     <table class="table">
         <thead>
         <tr>
             <th>Name</th>
             <th>Quantity</th>
-            <th>water</th>
-            <th>energy</th>
-            <th>protein</th>
-            <th>sugar</th>
-            <th>sodium</th>
+            <th>Water (g)</th>
+            <th>Energy (Kcal)</th>
+            <th>Protein (g)</th>
+            <th>Sugar (g)</th>
+            <th>Sodium (mg)</th>
+            <th>Cholesterol (mg)</th>
+            <th>Carbohydrate (g)</th>
+            <th> </th>
         </tr>
         </thead>
         <tbody>
@@ -39,12 +42,14 @@
                 <% if (calcList.hasOwnProperty(key)) {%>
                 <tr>
                     <td><%=calcList[key].Shrt_Desc%></td>
-                    <td><%=calcList[key]['quant']%></td>
+                    <td><%=calcList[key]['quant']%> X <%=calcList[key]['GmWt_Desc1']%></td>
                     <td><%=Number(calcList[key]['Water_(g)']*calcList[key]['quant']).toFixed(2)%></td>
-                    <td><%=Number(calcList[key].Energ_Kcal*calcList[key]['quant']).toFixed(2)%></td>
+                    <td><%=Number(calcList[key]['Energ_Kcal']*calcList[key]['quant']).toFixed(2)%></td>
                     <td><%=Number(calcList[key]['Protein_(g)']*calcList[key]['quant']).toFixed(2)%></td>
                     <td><%=Number(calcList[key]['Sugar_Tot_(g)']*calcList[key]['quant']).toFixed(2)%></td>
                     <td><%=Number(calcList[key]['Sodium_(mg)']*calcList[key]['quant']).toFixed(2)%></td>
+                    <td><%=Number(calcList[key]['Cholestrl_(mg)']*calcList[key]['quant']).toFixed(2)%></td>
+                    <td><%=Number(calcList[key]['Carbohydrt_(g)']*calcList[key]['quant']).toFixed(2)%></td>
                     <td><form action="/calc/delete" method="post"><button type="submit">delete</button><input type="hidden" name="deleteId" value=<%=calcList[key].NDB_No%>></form></td>
                 </tr>
                 <%}%>
@@ -53,11 +58,13 @@
         <tr>
             <td><b>Total</b></td>
             <td></td>
-            <td><%=isNaN(total['Water_(g)'])?total['Water_(g)']:Number(total['Water_(g)']).toFixed(2)%></td>
-            <td><%=isNaN(total['Energ_Kcal'])?total['Energ_Kcal']:Number(total['Energ_Kcal']).toFixed(2)%></td>
-            <td><%=isNaN(total['Protein_(g)'])?total['Protein_(g)']:Number(total['Protein_(g)']).toFixed(2)%></td>
-            <td><%=isNaN(total['Sugar_Tot_(g)'])?total['Sugar_Tot_(g)']:Number(total['Sugar_Tot_(g)']).toFixed(2)%></td>
-            <td><%=isNaN(total['Sodium_(mg)'])?total['Sodium_(mg)']:Number(total['Sodium_(mg)']).toFixed(2)%></td>
+            <td><%=isNaN(total['Water_(g)'])?0:Number(total['Water_(g)']).toFixed(2)%></td>
+            <td><%=isNaN(total['Energ_Kcal'])?0:Number(total['Energ_Kcal']).toFixed(2)%></td>
+            <td><%=isNaN(total['Protein_(g)'])?0:Number(total['Protein_(g)']).toFixed(2)%></td>
+            <td><%=isNaN(total['Sugar_Tot_(g)'])?0:Number(total['Sugar_Tot_(g)']).toFixed(2)%></td>
+            <td><%=isNaN(total['Sodium_(mg)'])?0:Number(total['Sodium_(mg)']).toFixed(2)%></td>
+            <td><%=isNaN(total['Cholestrl_(mg)'])?0:Number(total['Cholestrl_(mg)']).toFixed(2)%></td>
+            <td><%=isNaN(total['Carbohydrt_(g)'])?0:Number(total['Carbohydrt_(g)']).toFixed(2)%></td>
         </tr>
         </tbody>
     </table>
@@ -73,11 +80,29 @@
     /* CSS HERE */
 </style>
 <script>
-    $(function() {
-        var l = <%-nutritionList%>;
+//    $(function() {
+//        var l = nutritionList;
+//        $( "#tags" ).autocomplete({
+//            source: l
+//        });
+//    });
+
+    function initAC(data) {
+        //alert(typeof data);
+        // might want to change to typeahead later
         $( "#tags" ).autocomplete({
-            source: l
+            source: JSON.parse(data)
         });
+    }
+
+    $(document).ready(function(){
+        $.ajax({
+            url: "/calc/autocomplete",
+            type: "GET",
+            success: function(data){
+                //$("#test").text(data['ajaxList']);
+                initAC(data['ajaxList']);
+            }});
     });
 </script>
 </body>
