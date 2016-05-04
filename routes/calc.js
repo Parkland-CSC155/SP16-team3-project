@@ -102,7 +102,7 @@ router.post("/post", function(req, res, next){
     var quant = req.body.quant;
     console.log(input);
     var ps = new sql.PreparedStatement();
-    ps.input('inputCalue', sql.Char)
+    ps.input('inputValue', sql.NVarChar)
     ps.prepare('SELECT * FROM NutritionData where Shrt_Desc = @inputValue', function (err){
         if(err)
             throw err;
@@ -111,6 +111,7 @@ router.post("/post", function(req, res, next){
                 if(err)
                     throw err;
                 if(typeof row!='undefined'){
+                    row = row[0];
                     // check if the row already exists
                     if(!calcList.hasOwnProperty(row.NDB_No)){
                         calcList[row.NDB_No] = row;
@@ -132,22 +133,24 @@ router.post("/post", function(req, res, next){
                 }
                 // send the user back to a confirmation page
                 res.redirect("/calc/");
+                ps.unprepare(function(err){})
             });
         }
     });
 });
 
-// router.post("/delete", function(req, res, next){
-//     var id = req.body.deleteId;
-//     console.log('delete '+id);
-//     for (var key in total) {
-//         if (total.hasOwnProperty(key) && !isNaN(total[key])) {
-//             total[key] -= Number(calcList[id][key])*calcList[id]['quant'];
-//         }
-//     }
-//     delete calcList[id];
-//     res.redirect("/calc/");
-// });
+router.post("/delete", function(req, res, next){
+    var id = req.body.deleteId;
+    console.log('delete '+id);
+    
+    for (var key in total) {
+        if (total.hasOwnProperty(key) && !isNaN(total[key])) {
+            total[key] -= Number(calcList[id][key])*calcList[id]['quant'];
+        }
+    }
+    delete calcList[id];
+    res.redirect("/calc/");
+});
 
 
 //-------------------------Sequelize version------------------------------------------------
