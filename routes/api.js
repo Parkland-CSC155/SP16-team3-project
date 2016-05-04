@@ -37,7 +37,7 @@ router.get("/search/:searchText", function(req, res, next){
     
     res.json()
     
-
+});
 
 router.get('/list', function(req, res) {
     res.send("hello World");
