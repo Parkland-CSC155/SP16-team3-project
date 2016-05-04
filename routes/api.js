@@ -10,7 +10,7 @@ router.get('/search', function (req,res) {
         id: req.params.id
     };
     
-     res.render('serach/:id', { model: model })
+     res.render('search/:id', { model: model })
 })
 
 
