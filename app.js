@@ -15,46 +15,46 @@ app.set('views', path.join(__dirname, 'views'));
 
 
 
-sql.connect(connection).then(function(){
-    new sql.Request().query(`select * from users  where username = ${value}`).then(function(recordset) {
-		console.dir(recordset);
-	}).catch(function(err) {
+// sql.connect(connection).then(function(){
+//     new sql.Request().query(`select * from users  where username = ${value}`).then(function(recordset) {
+// 		console.log(recordset);
+// 	}).catch(function(err) {
 		 
-	});
-});
-passport.use(new Strategy(
-    function(username, password, cb) {
-        db.users.findByUsername(username, function(err, user) {
-            if (err) { return cb(err); }
-            if (!user) { return cb(null, false); }
-            if (user.password != password) { return cb(null, false); }
-            return cb(null, user);
-        });
-    }));
+// 	});
+// });
+// passport.use(new Strategy(
+//     function(username, password, cb) {
+//         db.users.findByUsername(username, function(err, user) {
+//             if (err) { return cb(err); }
+//             if (!user) { return cb(null, false); }
+//             if (user.password != password) { return cb(null, false); }
+//             return cb(null, user);
+//         });
+//     }));
 
 
 
-passport.serializeUser(function(user, cb) {
-    cb(null, user.id);
-});
+// passport.serializeUser(function(user, cb) {
+//     cb(null, user.id);
+// });
 
-passport.deserializeUser(function(id, cb) {
-    db.users.findById(id, function(err, user) {
-        if (err) { return cb(err); }
-        cb(null, user);
-    });
-});
-
-
-
-app.use(require('morgan')('combined'));
-app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+// passport.deserializeUser(function(id, cb) {
+//     db.users.findById(id, function(err, user) {
+//         if (err) { return cb(err); }
+//         cb(null, user);
+//     });
+// });
 
 
-app.use(passport.initialize());
-app.use(passport.session());
+
+// app.use(require('morgan')('dev'));
+// app.use(require('cookie-parser')());
+// app.use(require('body-parser').urlencoded({ extended: true }));
+// app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+
+
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 
 app.get('/',
@@ -62,10 +62,10 @@ app.get('/',
         res.render('login', { user: req.user });
     });
 
-app.get('/login',
-    function(req, res) {
-        res.render('login');
-    });
+// app.get('/login',
+//     function(req, res) {
+//         res.render('login');
+//     });
 
 app.post('/login',
     passport.authenticate('local', { failureRedirect: '/login' }),
