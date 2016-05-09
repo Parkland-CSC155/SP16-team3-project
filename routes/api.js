@@ -1,6 +1,14 @@
 var express= require('express');
 var router = express.Router();
 
+var path = require('path');
+var mssql = require('mssql');
+//var db = new sqlite3.Database(path.resolve("./nutrition.db"));
+//var connectionString = process.env.MS_TableConnectionString;
+
+
+const APIKEY = "apiFinal155"
+
 router.get('/list', function(req, res) {
     res.render("api/list", {model: model});
 });

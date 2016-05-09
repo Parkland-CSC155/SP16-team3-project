@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+</head>
+
+<body>
+<div class="container">
+    <h1>Calculator</h1><!--<iframe src="http://localhost:3000/"></iframe>-->
+    <form action="/calc/post" method="post">
+        <label>Name</label>
+        <input class = "typehead" id = "tags" type="text" name="input" />
+        <label>Quantity</label>
+        <input id = "nums" type="number" name="quant" />
+        <button type="submit">Add</button>
+
+    </form>
+    <!--debugging tool-->
+    <!--<p id = "test">testing ajax</p>-->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Water (g)</th>
+            <th>Energy (Kcal)</th>
+            <th>Protein (g)</th>
+            <th>Sugar (g)</th>
+            <th>Sodium (mg)</th>
+            <th>Cholesterol (mg)</th>
+            <th>Carbohydrate (g)</th>
+            <th> </th>
+        </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+    <% include partials/pagination.ejs%>
+</div>
+
+
+<!-- JS -->
+<!-- this is the jQuery CDN reference. You need internet access for this file! -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<style type="text/css">
+  
+</style>
+
+
+</body>
+<% include ./partials/footer.ejs%>
+</html>

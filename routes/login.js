@@ -10,21 +10,16 @@ router.get('/login', function(req, res){
 });
 
 router.post('/login', function (req, res) {
+passport.use(new Strategy(
+    function(username, password, cb) {
+        db.users.findByUsername(username, function(err, user) {
+            if (err) { return cb(err); }
+            if (!user) { return cb(null, false); }
+            if (user.password != password) { return cb(null, false); }
+            return cb(null, user);
+        });
+    }));	
 	
-	var
-		username = req.body.username,
-		pwd = req.body.password;
-	
-	Parse.User.logIn(email, pwd)
-	.then(function (user) {
-		// Login succeeded, redirect to homepage.
-		req.setUser(user);
-		res.redirect('/');
-	}, function (error) {
-		// Login failed, redirect back to login form.
-        console.error(error);
-		res.redirect('/account/login');
-	});
 	
 });
 
@@ -41,15 +36,7 @@ router.get('/logout', function (req, res) {
 		 
 // 	});
 // });
-// passport.use(new Strategy(
-//     function(username, password, cb) {
-//         db.users.findByUsername(username, function(err, user) {
-//             if (err) { return cb(err); }
-//             if (!user) { return cb(null, false); }
-//             if (user.password != password) { return cb(null, false); }
-//             return cb(null, user);
-//         });
-//     }));
+
 
 
 

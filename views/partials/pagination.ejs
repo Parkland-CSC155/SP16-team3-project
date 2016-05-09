@@ -1,6 +1,9 @@
-<a href="/list?page=?">Prev</a>
-<a href="/list">1</a>
-<a href="/list?page=2">2</a>
-<a href="/list?page=3">3</a>
-<a href="/list?page=4">4</a>
-<a href="">next</a>
+<a href="/list?page=<%= (page - 1) %>">Prev</a>
+
+<a href="/list?<%= (page - 2) %>"><%= (page - 2) %></a>
+<a href="/list?<%= (page - 1) %>"><%= (page - 1) %></a>
+<a href="/list?<%= (page) %>"><%= (page) %></a>
+<a href="/list?<%= (page + 1) %>"><%= (page + 1) %></a>
+<a href="/list?<%= (page + 2) %>"><%= (page + 2) %></a>
+
+<a href="/list?<%= (page + 1) %>">Next</a>
