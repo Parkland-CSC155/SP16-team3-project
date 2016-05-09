@@ -12,22 +12,11 @@
 
 <body>
 <div class="container">
-    <h1>Calculator</h1><!--<iframe src="http://localhost:3000/"></iframe>-->
-    <form action="/calc/post" method="post">
-        <label>Name</label>
-        <input class = "typehead" id = "tags" type="text" name="input" />
-        <label>Quantity</label>
-        <input id = "nums" type="number" name="quant" />
-        <button type="submit">Add</button>
-
-    </form>
-    <!--debugging tool-->
-    <!--<p id = "test">testing ajax</p>-->
+   
     <table class="table">
         <thead>
         <tr>
             <th>Name</th>
-            <th>Quantity</th>
             <th>Water (g)</th>
             <th>Energy (Kcal)</th>
             <th>Protein (g)</th>
@@ -39,7 +28,17 @@
         </tr>
         </thead>
         <tbody>
-            
+        <% nutritionList.forEach(function(row) { %>
+            <td><%= nutritionList.name %> </td> 
+            <td><%= nutritionList.water %> </td>
+            <td><%= nutritionList.energy %> </td>
+            <td><%= nutritionList.protein %> </td>
+            <td><%= nutritionList.sugar %> </td>
+            <td><%= nutritionList.sodium %> </td>
+            <td><%= nutritionList.cholesterol %> </td>
+            <td><%= nutritionList.carbohydrate %> </td>
+        <% }); %>
+        
         </tbody>
     </table>
     <% include partials/pagination.ejs%>

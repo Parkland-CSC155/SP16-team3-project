@@ -41,7 +41,7 @@ app.get("/list", function (req, res) {
 
 
         res.render('list', {
-            // other data 
+            data: food, 
             page: page
         });
 
