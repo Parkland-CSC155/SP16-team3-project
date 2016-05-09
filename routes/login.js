@@ -3,6 +3,8 @@ var router = express.Router();
 var path = require('path');
 var sql = require('mssql');
 var bodyParser = require('body-parser');
+var mssql = require('mssql');
+
 
 // GET: /login
 router.get('/login', function(req, res){
