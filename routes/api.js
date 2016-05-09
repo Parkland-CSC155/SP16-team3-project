@@ -1,16 +1,16 @@
 var express= require('express');
 var router = express.Router();
 
-router.get('/', function(req, res) {
-    res.send("hello World");
+router.get('/list', function(req, res) {
+    res.render("api/list", {model: model});
 });
 
-router.get('/search', function (req,res) {
+router.get('/api/:id', function (req,res) {
     var model = {
         id: req.params.id
     };
     
-     res.render('search/:id', { model: model })
+     res.render('api/preview', { model: model })
 })
 
 
@@ -39,8 +39,6 @@ router.get('/search', function (req,res) {
     
 // });
 
-router.get('/list', function(req, res) {
-    res.send("hello World");
-});
+
 
 module.exports = router;

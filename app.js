@@ -59,13 +59,13 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.get('/',
     function(req, res) {
-        res.render('login', { user: req.user });
+        res.render('/list', { user: req.user });
     });
 
-// app.get('/login',
-//     function(req, res) {
-//         res.render('login');
-//     });
+app.get('/login',
+    function(req, res) {
+        res.render('login');
+    });
 
 app.post('/login',
     passport.authenticate('local', { failureRedirect: '/login' }),
