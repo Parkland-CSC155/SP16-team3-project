@@ -1,18 +1,37 @@
 var express = require('express');
-var fs = require('fs');
-var app = express();
+var router = express.Router();
 var path = require('path');
-var passport = require('passport');
-var Strategy = require('passport-local').Strategy;
-var port = process.env.PORT || 3000;
 var sql = require('mssql');
+var bodyParser = require('body-parser');
 
-var connection= "Driver={tedious};Server=tcp:nutritiondbserver.database.windows.net,1433;Database=nutritionDb;Uid=team3@nutritiondbserver;Pwd={your_password_here};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=3000;"
+// GET: /login
+router.get('/login', function(req, res){
+	res.render("login");
+});
 
+router.post('/login', function (req, res) {
+	
+	var
+		username = req.body.username,
+		pwd = req.body.password;
+	
+	Parse.User.logIn(email, pwd)
+	.then(function (user) {
+		// Login succeeded, redirect to homepage.
+		req.setUser(user);
+		res.redirect('/');
+	}, function (error) {
+		// Login failed, redirect back to login form.
+        console.error(error);
+		res.redirect('/account/login');
+	});
+	
+});
 
-app.set("view engine", 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
+router.get('/logout', function (req, res) {
+  req.logout();  
+  res.redirect('/');
+});
 
 
 // sql.connect(connection).then(function(){
@@ -57,34 +76,4 @@ app.set('views', path.join(__dirname, 'views'));
 // app.use(passport.session());
 
 
-app.get('/',
-    function(req, res) {
-        res.render('/list', { user: req.user });
-    });
-
-app.get('/login',
-    function(req, res) {
-        res.render('login');
-    });
-
-app.post('/login',
-    passport.authenticate('local', { failureRedirect: '/login' }),
-    function(req, res) {
-        res.redirect('/');
-    });
-
-app.get('/logout',
-    function(req, res) {
-        req.logout();
-        res.redirect('/');
-    });
-
-app.use('/api', require('./routes/api'));
-app.use('/calc', require('./routes/calc'));
-
-//app.use(express.static(path.join(__dirname, 'public/js')));
-app.use(express.static('public'));
-
-app.listen(port, function() {
-    console.log("listening to port " + port);
-});
+module.exports = router; 
