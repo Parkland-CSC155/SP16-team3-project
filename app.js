@@ -15,22 +15,19 @@ app.set('views', path.join(__dirname, 'views'));
 
 
 
-// sql.connect(connection).then(function(){
-//     new sql.Request().query(`select * from users  where username = ${value}`).then(function(recordset) {
-// 		console.log(recordset);
-// 	}).catch(function(err) {
+sql.connect(connection).then(function(){
+    new sql.Request().query(`select * from users  where username = ${value}`).then(function(recordset) {
+		if(value != username){
+            console.err("Invalid Username or Password");
+        }
+        else if (recordset.password != password){
+            console.err("Invalid Username or Password")
+        }
+        console.log(recordset);
+	}).catch(function(err) {
 		 
-// 	});
-// });
-// passport.use(new Strategy(
-//     function(username, password, cb) {
-//         db.users.findByUsername(username, function(err, user) {
-//             if (err) { return cb(err); }
-//             if (!user) { return cb(null, false); }
-//             if (user.password != password) { return cb(null, false); }
-//             return cb(null, user);
-//         });
-//     }));
+	});
+});
 
 
 
