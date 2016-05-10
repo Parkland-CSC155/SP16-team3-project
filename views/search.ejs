@@ -12,6 +12,12 @@
 
 <body>
 <div class="container">
+<form action="/list/post" method="post">
+        <label>Name</label>
+        <input class = "typehead" id = "tags" type="text" name="input" />
+        <button type="submit">Search</button>
+
+    </form>
    
     <table class="table">
         <thead>
@@ -28,7 +34,7 @@
         </tr>
         </thead>
         <tbody>
-         <%if(typeof foodList != 'undefined'){%>
+        <%if(typeof foodList != 'undefined'){%>
             <% for (var key in foodList) {%>
                 <% if (foodList.hasOwnProperty(key)) {%>
                     <tr >
@@ -59,8 +65,15 @@
 <style type="text/css">
   
 </style>
-
-
+<script>
+   $(document).ready(function(){
+        $.ajax({
+            url: "/search/{searchText}",
+            type: "GET",
+            success: function(data){
+                details(data['foodList']);
+            }});
+</script>
 </body>
 <% include ./partials/footer.ejs%>
 </html>
