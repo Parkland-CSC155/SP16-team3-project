@@ -7,6 +7,7 @@ var mssql = require('mssql');
 var connectionString = process.env.MS_TableConnectionString;
 var bodyParser = require('body-parser');
 
+var nutritionList = [];
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -132,9 +133,18 @@ router.get("/search/:searchText", function(req, res, next) {
 });
 
 router.get("/details/:id", function(req, res, next) {
+<<<<<<< Updated upstream
    
     var id = req.params.id;
 
+=======
+
+   
+    var id = req.params.id;
+
+    
+
+>>>>>>> Stashed changes
     var sqlReq = `
     SELECT * 
     FROM NutritionData
