@@ -6,10 +6,12 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
+    <%include ./partials/head.ejs%>
 </head>
 
 <body>
 <div class="container">
+    <%include ./partials/header.ejs%>
     <h1>Calculator</h1><!--<iframe src="http://localhost:3000/"></iframe>-->
     <form action="/calc/post" method="post">
         <label>Name</label>
@@ -40,7 +42,7 @@
         <%if(typeof calcList != 'undefined'){%>
             <% for (var key in calcList) {%>
                 <% if (calcList.hasOwnProperty(key)) {%>
-                <tr>
+                <tr id="row<%=calcList[key]['NDB_No']%>">
                     <td><%=calcList[key].Shrt_Desc%></td>
                     <td><%=calcList[key]['quant']%> X <%=calcList[key]['GmWt_Desc1']%></td>
                     <td><%=Number(calcList[key]['Water_(g)']*calcList[key]['quant']).toFixed(2)%></td>
@@ -50,7 +52,7 @@
                     <td><%=Number(calcList[key]['Sodium_(mg)']*calcList[key]['quant']).toFixed(2)%></td>
                     <td><%=Number(calcList[key]['Cholestrl_(mg)']*calcList[key]['quant']).toFixed(2)%></td>
                     <td><%=Number(calcList[key]['Carbohydrt_(g)']*calcList[key]['quant']).toFixed(2)%></td>
-                    <td><form action="/calc/delete" method="post"><button type="submit">delete</button><input type="hidden" name="deleteId" value=<%=calcList[key].NDB_No%>></form></td>
+                    <td><form action="/calc/delete" method="post"><button class="deleteButton" type="submit">delete</button><input type="hidden" name="deleteId" value=<%=calcList[key].NDB_No%>></form></td>
                 </tr>
                 <%}%>
             <%}%>
@@ -104,6 +106,27 @@
                 initAC(data['ajaxList']);
             }});
     });
+
+//    $(".deleteButton").click(function(){
+//
+//        $.ajax({
+//            url: "/calc/delete",
+//            type: "POST",
+//            data:$("#idForm").serialize()
+//            success: function(rowid){
+//                alert(rowid);
+//            }});
+//    });
+//    $(".deleteButton").click(function(){
+//
+//        $.ajax({
+//            url: "/calc/delete",
+//            type: "POST",
+//            data:$("#idForm").serialize()
+//            success: function(rowid){
+//                alert(rowid);
+//            }});
+//    });
 </script>
 </body>
 <% include partials/footer.ejs%>

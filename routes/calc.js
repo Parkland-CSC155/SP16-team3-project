@@ -2,8 +2,8 @@ var express= require('express');
 var router = express.Router();
 var sqlite3 = require('sqlite3').verbose();
 var path = require('path');
-var Sequelize = require('sequelize');
-//TODO: convert to mssql
+var conn = require('../app');
+
 var sql = require('mssql');
 var db = new sqlite3.Database(path.resolve("./nutrition.db"));
 //var session = require('express-session');
@@ -54,7 +54,7 @@ router.use(bodyParser.urlencoded({ extended: false }));
 //         res.redirect("/calc/");
 //     });
 // });
-
+//
 // router.post("/delete", function(req, res, next){
 //     var id = req.body.deleteId;
 //     console.log('delete '+id);
@@ -66,8 +66,8 @@ router.use(bodyParser.urlencoded({ extended: false }));
 //     delete calcList[id];
 //     res.redirect("/calc/");
 // });
-
-// // init list of names for autocomplete
+//
+//// // init list of names for autocomplete
 // db.each('SELECT Shrt_Desc FROM NutritionData', function(err, row) {
 //     if(err)
 //         throw err;
@@ -79,23 +79,25 @@ router.get('/autocomplete', function(req, res) {
 });
 
 //-----------------------mssql version------------------------------------------
-sql.connect(connectionString).then(function(){
+//sql.connect(connectionString).then(function(){
+// function to be exported so it can be called after connection is established in app.js
+var funcBuild = function() {
     var request = new sql.Request();
-    request.query('SELECT Shrt_Desc FROM NutritionData', function(err, recordset) {
-        if(err)
+    request.query('SELECT Shrt_Desc FROM NutritionData', function (err, recordset) {
+        if (err)
             throw err;
         //console.log(recordset);
-        recordset.forEach(function(row){
+        recordset.forEach(function (row) {
             nutritionList.push(row['Shrt_Desc']);
         });
         console.log('list loaded');
     })
-    
-})
-.catch(function (err) {
-    console.log(err);
-    next(err);
-});
+};
+//})
+//.catch(function (err) {
+//    console.log(err);
+//    next(err);
+//});
 
 router.post("/post", function(req, res, next){
     var input = req.body.input;
@@ -110,7 +112,7 @@ router.post("/post", function(req, res, next){
             ps.execute({inputValue:input}, function(err, row, affected) {
                 if(err)
                     throw err;
-                if(typeof row!='undefined'){
+                if(row.length>0){
                     row = row[0];
                     // check if the row already exists
                     if(!calcList.hasOwnProperty(row.NDB_No)){
@@ -142,7 +144,7 @@ router.post("/post", function(req, res, next){
 router.post("/delete", function(req, res, next){
     var id = req.body.deleteId;
     console.log('delete '+id);
-    
+
     for (var key in total) {
         if (total.hasOwnProperty(key) && !isNaN(total[key])) {
             total[key] -= Number(calcList[id][key])*calcList[id]['quant'];
@@ -152,7 +154,7 @@ router.post("/delete", function(req, res, next){
     res.redirect("/calc/");
 });
 
-
+// Ignore this section
 //-------------------------Sequelize version------------------------------------------------
 
 
@@ -166,22 +168,16 @@ router.post("/delete", function(req, res, next){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // Render webpage
 router.get('/', function(req, res) {
     // No idea why using JSON.stringfy makes it work..
     //res.render('calculator', {nutritionList, calcList, total});
-    res.render('calculator', {nutritionList:JSON.stringify(nutritionList), calcList, total});
+    // only accessible after logging in
+    if(req.user)
+        res.render('calculator', {nutritionList:JSON.stringify(nutritionList), calcList, total});
+    else
+        res.redirect('login')
 });
 
 module.exports = router;
+module.exports.funcBuild = funcBuild;
