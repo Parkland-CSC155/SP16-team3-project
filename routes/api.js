@@ -4,8 +4,13 @@ var router = express.Router();
 var path = require('path');
 var mssql = require('mssql');
 //var db = new sqlite3.Database(path.resolve("./nutrition.db"));
-//var connectionString = process.env.MS_TableConnectionString;
+var connectionString = process.env.MS_TableConnectionString;
+var bodyParser = require('body-parser');
 
+
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: false }));
+var nutritionList = [];
 
 const APIKEY = "apiFinal155";
 // validate all requests to the /api -based routes
@@ -115,6 +120,44 @@ router.get("/search/:searchText", function(req, res, next) {
                 nutritionList.push(row['Carbohydrate_(g)']);
 
             });
+            res.json(nutritionList);
+        })
+
+    })
+        .catch(function(err) {
+            console.log(err);
+            next(err);
+        });
+
+});
+
+router.get("/details/:id", function(req, res, next) {
+   
+    var id = req.params.id;
+
+    var sqlReq = `
+    SELECT * 
+    FROM NutritionData
+    WHERE id LIKE '${id}'
+    `;
+
+    sql.connect(connectionString).then(function() {
+        var request = new sql.Request();
+        request.query(sqlReq, function(err, recordsets) {
+            if (err) {
+                throw (err);
+            }
+            
+                nutritionList.push(row['Shrt_Desc']);
+                nutritionList.push(row['Water_(g)']);
+                nutritionList.push(row['Energy_(Kcal)']);
+                nutritionList.push(row['Protein_(g)']);
+                nutritionList.push(row['Sugar_(g)']);
+                nutritionList.push(row['Sodium_(mg']);
+                nutritionList.push(row['Cholesterol_(mg)']);
+                nutritionList.push(row['Carbohydrate_(g)']);
+
+            
             res.json(nutritionList);
         })
 
