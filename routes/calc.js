@@ -1,11 +1,11 @@
 var express= require('express');
 var router = express.Router();
-var sqlite3 = require('sqlite3').verbose();
+//var sqlite3 = require('sqlite3').verbose();
 var path = require('path');
 var conn = require('../app');
 
 var sql = require('mssql');
-var db = new sqlite3.Database(path.resolve("./nutrition.db"));
+//var db = new sqlite3.Database(path.resolve("./nutrition.db"));
 //var session = require('express-session');
 //var connectionString = "Driver={SQL Server Native Client 11.0};Server=tcp:nutritiondbserver.database.windows.net,1433;Database=nutritionDb;Uid=team3@nutritiondbserver;Pwd={CSC155final};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30";
 var connectionString = "Driver={tedious};Server=tcp:nutritiondbserver.database.windows.net,1433;Database=nutritionDb;Uid=team3@nutritiondbserver;Pwd={CSC155final};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=3000";

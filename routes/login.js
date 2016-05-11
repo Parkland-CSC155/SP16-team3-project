@@ -14,7 +14,7 @@ router.use(passport.session());
 router.get('/', function(req, res){
     // if already logged in then redirect to the home page, in this case the list page
     if(req.user)
-        res.render("list");
+        res.redirect("/list");
     else
         res.render("login");
 });
