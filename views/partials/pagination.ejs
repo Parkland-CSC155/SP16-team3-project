@@ -1,9 +1,12 @@
-<a href="/list?page=<%= (page - 1) %>">Prev</a>
+<%if(Number(page)>1){%>
+    <a href="/list?page=<%= (Number(page) - 1) %>">Prev</a>
+    <%if(Number(page)>2){%>
+        <a href="/list?page=<%= (Number(page) - 2) %>"><%= (Number(page) - 2) %></a>
+    <%}%>
+    <a href="/list?page=<%= (Number(page) - 1) %>"><%= (Number(page) - 1) %></a>
+<%}%>
+<a href="/list?page=<%= (page) %>"><%= (page) %></a>
+<a href="/list?page=<%= (Number(page) + 1) %>"><%= (Number(page) + 1) %></a>
+<a href="/list?page=<%= (Number(page) + 2) %>"><%= (Number(page) + 2) %></a>
 
-<a href="/list?<%= (page - 2) %>"><%= (page - 2) %></a>
-<a href="/list?<%= (page - 1) %>"><%= (page - 1) %></a>
-<a href="/list?<%= (page) %>"><%= (page) %></a>
-<a href="/list?<%= (page + 1) %>"><%= (page + 1) %></a>
-<a href="/list?<%= (page + 2) %>"><%= (page + 2) %></a>
-
-<a href="/list?<%= (page + 1) %>">Next</a>
+<a href="/list?page=<%= (Number(page) + 1) %>">Next</a>

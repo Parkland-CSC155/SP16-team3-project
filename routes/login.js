@@ -3,50 +3,27 @@ var router = express.Router();
 var path = require('path');
 var sql = require('mssql');
 var bodyParser = require('body-parser');
-
-
-
-
-// GET: /login
-router.get('/login', function(req, res){
-	res.render("login");
-});
-
-router.post('/login', function (req, res) {
-passport.use(new Strategy(
-    function(username, password, cb) {
-        sql.users.findByUsername(username, function(err, user) {
-            if (err) { return cb(err); }
-            if (!user) { return cb(null, false); }
-            if (user.password != password) { return cb(null, false); }
-            return cb(null, user);
-        });
-    }));	
-	res.redirect('/');
-	
-});
-
-router.get('/logout', function (req, res) {
-  req.logout();  
-  res.redirect('/');
-});
-
-rt = require('passport');
+var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
+//var connectionString = "Driver={tedious};Server=tcp:nutritiondbserver.database.windows.net,1433;Database=nutritionDb;Uid=team3@nutritiondbserver;Pwd={CSC155final};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=3000";
+//var globaluid = 0;
 
 router.use(passport.initialize());
 router.use(passport.session());
 
 router.get('/', function(req, res){
-    res.render("login");
+    // if already logged in then redirect to the home page, in this case the list page
+    if(req.user)
+        res.render("list");
+    else
+        res.render("login");
 });
 passport.use(new Strategy(
     function(username, password, cb) {
         verifyUser(username, password, function(err, user) {
-            if (err) { return cb(err); 
-                }
+            if (err) { return cb(err); console.log("error");}
             if (!user) { console.log("no user found"); return cb(null, false); }
-         
+            //if (user.password != password) { return cb(null, false); }
             console.log(username + " login success");
             return cb(null, user);
         });
@@ -64,17 +41,17 @@ router.post('/',
     passport.authenticate('local', { successRedirect: '/calc',
         failureRedirect: '/login' }));
 
- passport.serializeUser(function(user, cb) {
-     //user.id = globaluid++;
-     cb(null, user.username+"-delim-"+user.password);
- });
+passport.serializeUser(function(user, cb) {
+    //user.id = globaluid++;
+    cb(null, user.username+"-delim-"+user.password);
+});
 
- passport.deserializeUser(function(key, cb) {
-     findUser(key, function(err, user) {
-         if (err) { return cb(err); }
-         cb(null, user);
-     });
- });
+passport.deserializeUser(function(key, cb) {
+    findUser(key, function(err, user) {
+        if (err) { return cb(err); }
+        cb(null, user);
+    });
+});
 
 // Connection now is established in app.js instead, also this section is for testing only.
 //var conn = new sql.connect(connectionString).then(function(){
@@ -124,7 +101,6 @@ function findUser(key, cb){
     var arr = key.split("-delim-");
     verifyUser(arr[0], arr[1], cb);
 }
-
 
 
 module.exports = router; 

@@ -2,9 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 var path = require('path');
-var mssql = require('mssql');
+var sql = require('mssql');
 //var db = new sqlite3.Database(path.resolve("./nutrition.db"));
-var connectionString = process.env.MS_TableConnectionString;
+var connectionString = "Driver={tedious};Server=tcp:nutritiondbserver.database.windows.net,1433;Database=nutritionDb;Uid=team3@nutritiondbserver;Pwd={CSC155final};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=3000";
+
 var bodyParser = require('body-parser');
 
 var nutritionList = [];
@@ -15,7 +16,7 @@ var nutritionList = [];
 
 const APIKEY = "apiFinal155";
 // validate all requests to the /api -based routes
-app.use(function(req, res, next) {
+router.use(function(req, res, next) {
 
     if (req.baseUrl !== "/api") {
         next();
@@ -49,14 +50,9 @@ router.get('/list', function(req, res) {
 
     var skip = (page - 1) * 25;
 
-    var sql = `
-    SELECT * 
-    FROM NutritionData
-    ORDER BY shrt_desc DESC
-    LIMIT 25 OFFSET ${skip}
-    `;
+    var sqlReq = 'SELECT * FROM NutritionData ORDER BY shrt_desc DESC LIMIT 25 OFFSET '+skip;
 
-    sql.connect(connectionString).then(function() {
+    //sql.connect(connectionString).then(function() {
         var request = new sql.Request();
         request.query(sqlReq, function(err, records) {
             if (err) {
@@ -78,11 +74,11 @@ router.get('/list', function(req, res) {
             res.json(nutritionList);
         })
 
-    })
-        .catch(function(err) {
-            console.log(err);
-            next(err);
-        });
+    //})
+    //    .catch(function(err) {
+    //        console.log(err);
+    //        next(err);
+    //    });
 
 });
 
@@ -96,15 +92,9 @@ router.get("/search/:searchText", function(req, res, next) {
 
     var skip = (page - 1) * 25;
 
-    var sqlReq = `
-    SELECT * 
-    FROM NutritionData
-    WHERE shrt_desc LIKE '${searchText}'
-    ORDER BY shrt_desc DESC
-    LIMIT 25 OFFSET ${skip}
-    `;
+    var sqlReq = 'SELECT * FROM NutritionData WHERE shrt_desc LIKE '+searchText+' ORDER BY shrt_desc DESC LIMIT 25 OFFSET '+skip;
 
-    sql.connect(connectionString).then(function() {
+    //sql.connect(connectionString).then(function() {
         var request = new sql.Request();
         request.query(sqlReq, function(err, recordsets) {
             if (err) {
@@ -124,11 +114,11 @@ router.get("/search/:searchText", function(req, res, next) {
             res.json(nutritionList);
         })
 
-    })
-        .catch(function(err) {
-            console.log(err);
-            next(err);
-        });
+    //})
+    //    .catch(function(err) {
+    //        console.log(err);
+    //        next(err);
+    //    });
 
 });
 
@@ -138,13 +128,9 @@ router.get("/details/:id", function(req, res, next) {
    
     var id = req.params.id;
 
-    var sqlReq = `
-    SELECT * 
-    FROM NutritionData
-    WHERE id LIKE '${id}'
-    `;
+    var sqlReq = 'SELECT * FROM NutritionDataWHERE id LIKE '+id;
 
-    sql.connect(connectionString).then(function() {
+    //sql.connect(connectionString).then(function() {
         var request = new sql.Request();
         request.query(sqlReq, function(err, recordsets) {
             if (err) {
@@ -164,11 +150,11 @@ router.get("/details/:id", function(req, res, next) {
             res.json(nutritionList);
         })
 
-    })
-        .catch(function(err) {
-            console.log(err);
-            next(err);
-        });
+    //})
+    //    .catch(function(err) {
+    //        console.log(err);
+    //        next(err);
+    //    });
 
 });
 

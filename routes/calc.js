@@ -173,8 +173,9 @@ router.get('/', function(req, res) {
     // No idea why using JSON.stringfy makes it work..
     //res.render('calculator', {nutritionList, calcList, total});
     // only accessible after logging in
+    console.log("user: " + req.user);
     if(req.user)
-        res.render('calculator', {nutritionList:JSON.stringify(nutritionList), calcList, total});
+        res.render('calculator', {nutritionList:JSON.stringify(nutritionList), calcList:calcList, total:total});
     else
         res.redirect('login')
 });
