@@ -133,18 +133,11 @@ router.get("/search/:searchText", function(req, res, next) {
 });
 
 router.get("/details/:id", function(req, res, next) {
-<<<<<<< Updated upstream
-   
-    var id = req.params.id;
 
-=======
 
    
     var id = req.params.id;
 
-    
-
->>>>>>> Stashed changes
     var sqlReq = `
     SELECT * 
     FROM NutritionData
