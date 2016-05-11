@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
     <title>List</title>
+
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
@@ -28,23 +30,19 @@
         </tr>
         </thead>
         <tbody>
-         <%if(typeof foodList != 'undefined'){%>
-            <% for (var key in foodList) {%>
-                <% if (foodList.hasOwnProperty(key)) {%>
-                    <tr >
-       
-                    <td><%=(foodList[key]['Shrt_Desc'])%></td>
-                    <td><%=(foodList[key][Water_(g)])%></td>
-                    <td><%=(foodList[key]['Energ_Kcal'])%></td>
-                    <td><%=(foodList[key]['Protein_(g)'])%></td>
-                    <td><%=(foodList[key]['Sugar_Tot_(g)'])%></td>
-                    <td><%=(foodList[key]['Sodium_(mg)'])%></td>
-                    <td><%=(foodList[key]['Cholestrl_(mg)'])%></td>
-                    <td><%=(foodList[key]['Carbohydrt_(g)'])%></td>
-            </tr>
-                <%}%>
-            <%}%>
-        <%}%>
+
+        <% nutritionList.forEach(function(row) { %>
+            <td><%= nutritionList.name %> </td> 
+            <td><%= nutritionList.water %> </td>
+            <td><%= nutritionList.energy %> </td>
+            <td><%= nutritionList.protein %> </td>
+            <td><%= nutritionList.sugar %> </td>
+            <td><%= nutritionList.sodium %> </td>
+            <td><%= nutritionList.cholesterol %> </td>
+            <td><%= nutritionList.carbohydrate %> </td>
+        <% }); %>
+        
+
         </tbody>
     </table>
     <% include partials/pagination.ejs%>
