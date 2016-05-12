@@ -180,10 +180,10 @@ router.get('/', function(req, res) {
     //res.render('calculator', {nutritionList, calcList, total});
     // only accessible after logging in
     console.log("user: " + req.user);
-    //if(req.user)
+    if(req.user)
         res.render('calculator', {nutritionList:JSON.stringify(nutritionList), calcList:calcList, total:total});
-    //else
-    //    res.redirect('login')
+    else
+        res.redirect('login')
 });
 
 module.exports = router;
