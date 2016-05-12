@@ -102,7 +102,7 @@ var funcBuild = function() {
 router.post("/post", function(req, res, next){
     var input = req.body.input;
     var quant = req.body.quant;
-    console.log(input);
+    console.log("new row request: "+input+quant);
     var ps = new sql.PreparedStatement();
     ps.input('inputValue', sql.NVarChar)
     ps.prepare('SELECT * FROM NutritionData where Shrt_Desc = @inputValue', function (err){
@@ -132,9 +132,13 @@ router.post("/post", function(req, res, next){
                                 total[key] += Number(row[key])*quant;
                         }
                     }
+                    //var nr = calcList[row.NDB_No];
+                    res.send({newRow:JSON.stringify(calcList[row.NDB_No]),total:total});
                 }
-                // send the user back to a confirmation page
-                res.redirect("/calc/");
+                //res.redirect("/calc/");
+                else{
+                    res.send(null);
+                }
                 ps.unprepare(function(err){})
             });
         }
@@ -151,7 +155,9 @@ router.post("/delete", function(req, res, next){
         }
     }
     delete calcList[id];
-    res.redirect("/calc/");
+    //res.redirect("/calc/");
+    // for ajax use
+    res.send({rowid:id, total:total});
 });
 
 // Ignore this section
@@ -174,10 +180,10 @@ router.get('/', function(req, res) {
     //res.render('calculator', {nutritionList, calcList, total});
     // only accessible after logging in
     console.log("user: " + req.user);
-    if(req.user)
+    //if(req.user)
         res.render('calculator', {nutritionList:JSON.stringify(nutritionList), calcList:calcList, total:total});
-    else
-        res.redirect('login')
+    //else
+    //    res.redirect('login')
 });
 
 module.exports = router;

@@ -15,12 +15,12 @@
 <div class="container">
     <%include ./partials/header.ejs%>
     <h1>Calculator</h1><!--<iframe src="http://localhost:3000/"></iframe>-->
-    <form action="/calc/post" method="post">
+    <form action="/calc/post" method="post" id="inputForm">
         <label>Name</label>
-        <input class = "typehead" id = "tags" type="text" name="input" />
+        <input class = "typehead" id = "names" type="text" name="input" />
         <label>Quantity</label>
         <input id = "nums" type="number" name="quant" />
-        <button type="submit">Add</button>
+        <button type="button" class="addButton">Add</button>
 
     </form>
     <!--debugging tool-->
@@ -40,7 +40,8 @@
             <th> </th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="tableData">
+
         <%if(typeof calcList != 'undefined'){%>
             <% for (var key in calcList) {%>
                 <% if (calcList.hasOwnProperty(key)) {%>
@@ -54,7 +55,7 @@
                     <td><%=Number(calcList[key]['Sodium_(mg)']*calcList[key]['quant']).toFixed(2)%></td>
                     <td><%=Number(calcList[key]['Cholestrl_(mg)']*calcList[key]['quant']).toFixed(2)%></td>
                     <td><%=Number(calcList[key]['Carbohydrt_(g)']*calcList[key]['quant']).toFixed(2)%></td>
-                    <td><form action="/calc/delete" method="post"><button class="deleteButton" type="submit">delete</button><input type="hidden" name="deleteId" value=<%=calcList[key].NDB_No%>></form></td>
+                    <td><form action="/calc/delete" method="post"><button class="deleteButton" type="button" value="<%=calcList[key].NDB_No%>">delete</button></form></td>
                 </tr>
                 <%}%>
             <%}%>
@@ -62,13 +63,13 @@
         <tr>
             <td><b>Total</b></td>
             <td></td>
-            <td><%=isNaN(total['Water_(g)'])?0:Number(total['Water_(g)']).toFixed(2)%></td>
-            <td><%=isNaN(total['Energ_Kcal'])?0:Number(total['Energ_Kcal']).toFixed(2)%></td>
-            <td><%=isNaN(total['Protein_(g)'])?0:Number(total['Protein_(g)']).toFixed(2)%></td>
-            <td><%=isNaN(total['Sugar_Tot_(g)'])?0:Number(total['Sugar_Tot_(g)']).toFixed(2)%></td>
-            <td><%=isNaN(total['Sodium_(mg)'])?0:Number(total['Sodium_(mg)']).toFixed(2)%></td>
-            <td><%=isNaN(total['Cholestrl_(mg)'])?0:Number(total['Cholestrl_(mg)']).toFixed(2)%></td>
-            <td><%=isNaN(total['Carbohydrt_(g)'])?0:Number(total['Carbohydrt_(g)']).toFixed(2)%></td>
+            <td id="tot_wat"><%=isNaN(total['Water_(g)'])?0:Number(total['Water_(g)']).toFixed(2)%></td>
+            <td id="tot_eng"><%=isNaN(total['Energ_Kcal'])?0:Number(total['Energ_Kcal']).toFixed(2)%></td>
+            <td id="tot_prt"><%=isNaN(total['Protein_(g)'])?0:Number(total['Protein_(g)']).toFixed(2)%></td>
+            <td id="tot_sug"><%=isNaN(total['Sugar_Tot_(g)'])?0:Number(total['Sugar_Tot_(g)']).toFixed(2)%></td>
+            <td id="tot_sod"><%=isNaN(total['Sodium_(mg)'])?0:Number(total['Sodium_(mg)']).toFixed(2)%></td>
+            <td id="tot_cho"><%=isNaN(total['Cholestrl_(mg)'])?0:Number(total['Cholestrl_(mg)']).toFixed(2)%></td>
+            <td id="tot_car"><%=isNaN(total['Carbohydrt_(g)'])?0:Number(total['Carbohydrt_(g)']).toFixed(2)%></td>
         </tr>
         </tbody>
     </table>
@@ -94,7 +95,7 @@
     function initAC(data) {
         //alert(typeof data);
         // might want to change to typeahead later
-        $( "#tags" ).autocomplete({
+        $( "#names" ).autocomplete({
             source: JSON.parse(data)
         });
     }
@@ -108,27 +109,69 @@
                 initAC(data['ajaxList']);
             }});
     });
+    function updateRow(data, rowName){
+        if(rowName!="tot"){
+            $("#"+rowName+"_num").text(data['quant']+" X "+data['GmWt_Desc1']);
+        }
+        if(rowName=="tot"){
+            data['quant'] = 1;
+        }
+        $("#"+rowName+"_wat").text((data['Water_(g)']*data['quant']).toFixed(2));
+        $("#"+rowName+"_eng").text((data['Energ_Kcal']*data['quant']).toFixed(2));
+        $("#"+rowName+"_prt").text((data['Protein_(g)']*data['quant']).toFixed(2));
+        $("#"+rowName+"_sug").text((data['Sugar_Tot_(g)']*data['quant']).toFixed(2));
+        $("#"+rowName+"_sod").text((data['Sodium_(mg)']*data['quant']).toFixed(2));
+        $("#"+rowName+"_cho").text((data['Cholestrl_(mg)']*data['quant']).toFixed(2));
+        $("#"+rowName+"_car").text((data['Carbohydrt_(g)']*data['quant']).toFixed(2));
+    }
+    $(document.body).on('click', ".deleteButton",function(){
+        $.ajax({
+            url: "/calc/delete",
+            type: "POST",
+            data:{deleteId:$(this).val()},
+            success: function(data){
+                //alert(rowid['rowid']);
+                $("#row"+data['rowid']).remove();
+                updateRow(data['total'],"tot");
+            }});
+    });
 
-//    $(".deleteButton").click(function(){
-//
-//        $.ajax({
-//            url: "/calc/delete",
-//            type: "POST",
-//            data:$("#idForm").serialize()
-//            success: function(rowid){
-//                alert(rowid);
-//            }});
-//    });
-//    $(".deleteButton").click(function(){
-//
-//        $.ajax({
-//            url: "/calc/delete",
-//            type: "POST",
-//            data:$("#idForm").serialize()
-//            success: function(rowid){
-//                alert(rowid);
-//            }});
-//    });
+
+    function addRow(data){
+        var dataString="<tr id=\"row"+data['NDB_No']+"\">"+
+                "<td id=\""+data['NDB_No']+"_name\">"+data['Shrt_Desc']+"</td>"+
+                "<td id=\""+data['NDB_No']+"_num\">"+data['quant']+" X "+data['GmWt_Desc1']+"</td>"+
+                "<td id=\""+data['NDB_No']+"_wat\">"+(data['Water_(g)']*data['quant']).toFixed(2)+"</td>"+
+                "<td id=\""+data['NDB_No']+"_eng\">"+(data['Energ_Kcal']*data['quant']).toFixed(2)+"</td>"+
+                "<td id=\""+data['NDB_No']+"_prt\">"+(data['Protein_(g)']*data['quant']).toFixed(2)+"</td>"+
+                "<td id=\""+data['NDB_No']+"_sug\">"+(data['Sugar_Tot_(g)']*data['quant']).toFixed(2)+"</td>"+
+                "<td id=\""+data['NDB_No']+"_sod\">"+(data['Sodium_(mg)']*data['quant']).toFixed(2)+"</td>"+
+                "<td id=\""+data['NDB_No']+"_cho\">"+(data['Cholestrl_(mg)']*data['quant']).toFixed(2)+"</td>"+
+                "<td id=\""+data['NDB_No']+"_car\">"+(data['Carbohydrt_(g)']*data['quant']).toFixed(2)+"</td>"+
+                "<td id=\""+data['NDB_No']+"\"><form action=\"/calc/delete\" method=\"post\"><button class=\"deleteButton\" type=\"button\" value=\""+data['NDB_No']+"\">delete</button></form></td>"+
+                "</tr> ";
+        $('#tableData').append(dataString);
+    }
+
+    $(".addButton").click(function(){
+        $.ajax({
+            url: "/calc/post",
+            type: "POST",
+            data:{input:$('#names').val(), quant:$('#nums').val()},
+            success: function(data){
+                if(data['newRow']!=null){
+                    rowData = JSON.parse(data['newRow']);
+                    if(document.getElementById("row"+rowData['NDB_No']) == null){
+                        addRow(rowData, rowData['NDB_No']);
+                    }
+                    else{
+                        updateRow(rowData, rowData['NDB_No']);
+                    }
+                    updateRow(data['total'], "tot");
+                }
+            }
+        });
+    });
 </script>
 </body>
 
