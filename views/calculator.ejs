@@ -41,7 +41,17 @@
         </tr>
         </thead>
         <tbody id="tableData">
-
+        <tr>
+            <td><b>Total</b></td>
+            <td></td>
+            <td id="tot_wat"><%=isNaN(total['Water_(g)'])?0:Number(total['Water_(g)']).toFixed(2)%></td>
+            <td id="tot_eng"><%=isNaN(total['Energ_Kcal'])?0:Number(total['Energ_Kcal']).toFixed(2)%></td>
+            <td id="tot_prt"><%=isNaN(total['Protein_(g)'])?0:Number(total['Protein_(g)']).toFixed(2)%></td>
+            <td id="tot_sug"><%=isNaN(total['Sugar_Tot_(g)'])?0:Number(total['Sugar_Tot_(g)']).toFixed(2)%></td>
+            <td id="tot_sod"><%=isNaN(total['Sodium_(mg)'])?0:Number(total['Sodium_(mg)']).toFixed(2)%></td>
+            <td id="tot_cho"><%=isNaN(total['Cholestrl_(mg)'])?0:Number(total['Cholestrl_(mg)']).toFixed(2)%></td>
+            <td id="tot_car"><%=isNaN(total['Carbohydrt_(g)'])?0:Number(total['Carbohydrt_(g)']).toFixed(2)%></td>
+        </tr>
         <%if(typeof calcList != 'undefined'){%>
             <% for (var key in calcList) {%>
                 <% if (calcList.hasOwnProperty(key)) {%>
@@ -60,17 +70,7 @@
                 <%}%>
             <%}%>
         <%}%>
-        <tr>
-            <td><b>Total</b></td>
-            <td></td>
-            <td id="tot_wat"><%=isNaN(total['Water_(g)'])?0:Number(total['Water_(g)']).toFixed(2)%></td>
-            <td id="tot_eng"><%=isNaN(total['Energ_Kcal'])?0:Number(total['Energ_Kcal']).toFixed(2)%></td>
-            <td id="tot_prt"><%=isNaN(total['Protein_(g)'])?0:Number(total['Protein_(g)']).toFixed(2)%></td>
-            <td id="tot_sug"><%=isNaN(total['Sugar_Tot_(g)'])?0:Number(total['Sugar_Tot_(g)']).toFixed(2)%></td>
-            <td id="tot_sod"><%=isNaN(total['Sodium_(mg)'])?0:Number(total['Sodium_(mg)']).toFixed(2)%></td>
-            <td id="tot_cho"><%=isNaN(total['Cholestrl_(mg)'])?0:Number(total['Cholestrl_(mg)']).toFixed(2)%></td>
-            <td id="tot_car"><%=isNaN(total['Carbohydrt_(g)'])?0:Number(total['Carbohydrt_(g)']).toFixed(2)%></td>
-        </tr>
+
         </tbody>
     </table>
 </div>
